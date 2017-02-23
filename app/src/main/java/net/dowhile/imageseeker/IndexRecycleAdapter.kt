@@ -12,17 +12,14 @@ import net.dowhile.imageseeker.Network.ServiceProxy
 import org.jetbrains.anko.toast
 
 class IndexRecycleAdapter(internal val didSelectedAtPos: (data: ListData) -> Unit) : RecyclerView.Adapter<IndexRecycleAdapter.ViewHolder>() {
-    private val mItems: MutableList<ListData>
+    private var mItems = arrayOf<ListData>()
     internal var mContext: Context? = null
     private var currentPage = 1
-    init {
-        mItems = mutableListOf<ListData>()
-    }
 
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): ViewHolder {
         mContext = parent.context
         val layoutInflater = LayoutInflater.from(parent.context)
-        var viewHolder = ViewHolder(layoutInflater.inflate(R.layout.index_item, parent, false))
+        val viewHolder = ViewHolder(layoutInflater.inflate(R.layout.index_item, parent, false))
         return viewHolder
     }
 
@@ -67,7 +64,7 @@ class IndexRecycleAdapter(internal val didSelectedAtPos: (data: ListData) -> Uni
         //如果是刷新
         if (!loadMore) {
             currentPage = 1
-            mItems.removeAll(mItems)
+            mItems = arrayOf<ListData>()
             //notifyDataSetChanged()
         }
         ServiceProxy.getList(currentPage) { res, error ->
@@ -75,14 +72,13 @@ class IndexRecycleAdapter(internal val didSelectedAtPos: (data: ListData) -> Uni
                 //出错
                 mContext!!.toast("错误 $error")
                 currentPage = 1
-                mItems.removeAll(mItems)
+                mItems = arrayOf<ListData>()
             }else if (res!!.count() == 0){
                 //No More
                 mContext!!.toast("没有更多了")
-                res!!.forEach { item -> mItems.add(0,item)}
             }else{
                 currentPage += 1
-                res!!.forEach { item -> mItems.add(0,item)}
+                mItems += res!!
                 mContext!!.toast("成功")
                 //成功
             }

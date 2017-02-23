@@ -12,15 +12,12 @@ import net.dowhile.imageseeker.Detail.ImageActivity
 import org.jetbrains.anko.support.v4.onRefresh
 import org.jetbrains.anko.toast
 class MainActivity : AppCompatActivity() {
-
+    var isLoading = false
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_main)
                  //设置刷新时动画的颜色，可以设置4个
-
-
-
         val layoutManager = GridLayoutManager(this,2)
         //设置布局管理器
         myRecyclerView.layoutManager = layoutManager
@@ -42,27 +39,47 @@ class MainActivity : AppCompatActivity() {
         myRecyclerView.itemAnimator = DefaultItemAnimator()
         swipe_container.setColorSchemeResources(android.R.color.holo_blue_light, android.R.color.holo_red_light, android.R.color.holo_orange_light, android.R.color.holo_green_light)
         swipe_container.onRefresh {
-            adapter.loadList(false,{
-                swipe_container.isRefreshing = false
-                print("***************************")
-                print(swipe_container.isRefreshing)
-                print("***************************")
-            })
-//            Handler().postDelayed({
-//                kotlin.run {
-//                 adapter.loadList(false,{
-//                        swipe_container.isRefreshing = false
-//                        print(swipe_container.isRefreshing)
-//                 })
-//                }
-//            },3000)
+            if (!isLoading) {
+                isLoading = true
+                adapter.loadList(false, {
+                    swipe_container.isRefreshing = false
+                    isLoading = false
+                })
+            }else toast("别着急,加载ing")
         }
+        //上拉
+        myRecyclerView.addOnScrollListener(object : RecyclerView.OnScrollListener() {
+            override fun onScrollStateChanged(recyclerView: RecyclerView, newState: Int) {
+                super.onScrollStateChanged(recyclerView, newState)
+            }
 
+            override fun onScrolled(recyclerView: RecyclerView, dx: Int, dy: Int) {
+                super.onScrolled(recyclerView, dx, dy)
+                val lastVisibleItemPosition = layoutManager.findLastVisibleItemPosition()
+                if (lastVisibleItemPosition + 1 == adapter.itemCount) {
+                    if (swipe_container.isRefreshing) {
+                        adapter.notifyItemRemoved(adapter.itemCount)
+                        return
+                    }
+                    if (!isLoading) {
+                        swipe_container.isRefreshing = true
+                        isLoading = true
+                        adapter.loadList(true, {
+                            swipe_container.isRefreshing = false
+                            isLoading = false
+                        })
+                    }else toast("别着急,加载ing")
+                }
+            }
+        })
+        
+        //开始刷新
         swipe_container.post {
             kotlin.run {
                 swipe_container.isRefreshing = true
             }
         }
+        //读取一次数据
         adapter.loadList(false,{
             swipe_container.post {
                 kotlin.run {
@@ -80,8 +97,4 @@ class MainActivity : AppCompatActivity() {
     internal fun inentToActivity(url:String){
         toast("tapped $url")
     }
-}
-
-class DividerGridItemDecoration(mainActivity: MainActivity) : RecyclerView.ItemDecoration() {
-
 }
