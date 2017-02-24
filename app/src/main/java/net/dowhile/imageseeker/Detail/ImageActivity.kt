@@ -4,17 +4,21 @@ import android.app.Activity
 import android.graphics.Color
 import android.os.Bundle
 import android.view.Gravity
+import android.view.View
 import android.view.Window
 import android.view.WindowManager
+import android.widget.Button
 import android.widget.Gallery
 import android.widget.ImageView
 import com.bumptech.glide.Glide
+import net.dowhile.imageseeker.Utility.AutoRotateTransformation
 import net.dowhile.imageseeker.R
 import org.jetbrains.anko.*
-
+import net.dowhile.imageseeker.Utility.RotateTransformation
 class ImageActivity : Activity() {
     var image:ImageView? = null
     var myGallery:Gallery? = null
+    var saveBtn:Button? = null
     var adapter: DetailGalleryAdapter? = null
     var currentIndex = 0
     override fun onCreate(savedInstanceState: Bundle?) {
@@ -23,7 +27,7 @@ class ImageActivity : Activity() {
         verticalLayout {
             gravity = Gravity.BOTTOM
             image = imageView {
-                scaleType = ImageView.ScaleType.FIT_END
+                scaleType = ImageView.ScaleType.FIT_CENTER
                 backgroundColor = Color.LTGRAY
             }.lparams {
                 width = matchParent
@@ -59,8 +63,9 @@ class ImageActivity : Activity() {
         currentIndex = i
         Glide.with(this)
                 .load(adapter!!.dataArray!![i].img)
-
+                .transform(AutoRotateTransformation(this))
                 .placeholder(R.drawable.thumb)
+                .crossFade()
                 .into(image)
     }
 
@@ -69,6 +74,10 @@ class ImageActivity : Activity() {
         window.setFlags(WindowManager.LayoutParams.FLAG_FULLSCREEN,
                 WindowManager.LayoutParams.FLAG_FULLSCREEN)
 
+    }
+
+    fun toSaveImage(){
+        toast("积分不足")
     }
 }
 

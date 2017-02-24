@@ -1,5 +1,6 @@
 package net.dowhile.imageseeker
 
+import android.content.Context
 import android.content.Intent
 import android.os.Bundle
 import android.support.v7.app.AppCompatActivity
@@ -7,8 +8,11 @@ import android.support.v7.widget.DefaultItemAnimator
 import android.support.v7.widget.GridLayoutManager
 import android.support.v7.widget.OrientationHelper
 import android.support.v7.widget.RecyclerView
+import android.util.Log
+import com.avos.avoscloud.*
 import kotlinx.android.synthetic.main.activity_main.*
 import net.dowhile.imageseeker.Detail.ImageActivity
+import net.youmi.android.AdManager
 import org.jetbrains.anko.support.v4.onRefresh
 import org.jetbrains.anko.toast
 class MainActivity : AppCompatActivity() {
@@ -17,7 +21,29 @@ class MainActivity : AppCompatActivity() {
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_main)
-                 //设置刷新时动画的颜色，可以设置4个
+
+
+        //有米广告
+        val appId = "542faf057d621231"
+        val appSecret = "835f70af30806c98"
+        val isTestModel = true
+        val isEnableYoumiLog = true
+        AdManager.getInstance(this).init(appId, appSecret , isTestModel, isEnableYoumiLog);
+
+
+        AVOSCloud.initialize(this, "xei6QryNnfTUrW6fStLQiBb2-gzGzoHsz", "3JFWYTsUbJlnpSIRFegD6EEg")
+        AVAnalytics.enableCrashReport(this, true);
+        val testObject = AVObject("TestObject")
+        testObject.put("words", "Hello World!")
+        testObject.saveInBackground(object : SaveCallback() {
+            override fun done(e: AVException?) {
+                if (e == null) {
+                    Log.d("saved", "success!")
+                }
+            }
+        })
+
+        //设置刷新时动画的颜色，可以设置4个
         val layoutManager = GridLayoutManager(this,2)
         //设置布局管理器
         myRecyclerView.layoutManager = layoutManager
@@ -30,6 +56,8 @@ class MainActivity : AppCompatActivity() {
             intent.putExtra("url",data.url)
             this.startActivity(intent)
         })
+
+
         //设置Adapter
         myRecyclerView.adapter = adapter
         adapter.mContext = this
