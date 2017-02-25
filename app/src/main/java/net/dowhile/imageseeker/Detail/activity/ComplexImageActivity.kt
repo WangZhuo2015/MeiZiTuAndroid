@@ -45,7 +45,7 @@ class ComplexImageActivity : FragmentActivity() {
         val pagerPosition = savedInstanceState?.getInt(STATE_POSITION) ?: 0
 
         pager = findViewById(R.id.pager) as ViewPager
-        pager!!.adapter = ImagePagerAdapter(supportFragmentManager,url)
+        pager!!.adapter = ImagePagerAdapter(supportFragmentManager,url,titleStr)
         pager!!.currentItem = pagerPosition
     }
 
@@ -56,11 +56,11 @@ class ComplexImageActivity : FragmentActivity() {
         outState.putInt(STATE_POSITION, pager!!.currentItem)
     }
 
-    private inner class ImagePagerAdapter internal constructor(fm: FragmentManager,dataUrl: String) : FragmentPagerAdapter(fm) {
+    private inner class ImagePagerAdapter internal constructor(fm: FragmentManager,dataUrl: String,title:String) : FragmentPagerAdapter(fm) {
 
-        internal var listFragment: Fragment
         internal var gridFragment: Fragment
         internal var url: String
+        val titleStr :String
         var dataArray: kotlin.Array<ItemData>?  = null
         fun loadData(url:String,complete:()->Unit){
             ServiceProxy.getImages(url,{ data, error ->
@@ -70,8 +70,8 @@ class ComplexImageActivity : FragmentActivity() {
         }
 
         init {
+            titleStr = title
             url = dataUrl
-            listFragment = ImageListFragment()
             gridFragment = ImageGridFragment()
             loadData(url,{
                 (gridFragment as ImageGridFragment).setData(dataArray)
@@ -79,23 +79,15 @@ class ComplexImageActivity : FragmentActivity() {
         }
 
         override fun getCount(): Int {
-            return 2
+            return 1
         }
 
         override fun getItem(position: Int): Fragment? {
-            when (position) {
-                0 -> return listFragment
-                1 -> return gridFragment
-                else -> return null
-            }
+            return gridFragment
         }
 
         override fun getPageTitle(position: Int): CharSequence? {
-            when (position) {
-                0 -> return getString(R.string.title_list)
-                1 -> return getString(R.string.title_grid)
-                else -> return null
-            }
+            return titleStr
         }
     }
 

@@ -58,11 +58,9 @@ class MainActivity : AppCompatActivity() {
         //设置为垂直布局，这也是默认的
         layoutManager.orientation = OrientationHelper.VERTICAL
         val adapter = IndexRecycleAdapter({data ->
-//            val intent = Intent(this, ImageActivity::class.java)
-//            intent.putExtra("title",data.title)
-
             val intent = Intent(this, ComplexImageActivity::class.java)
             intent.putExtra("url",data.url)
+            intent.putExtra("title",data.title)
             this.startActivity(intent)
         })
 

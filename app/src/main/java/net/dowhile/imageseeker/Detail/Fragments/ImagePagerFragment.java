@@ -17,10 +17,13 @@ package net.dowhile.imageseeker.Detail.Fragments;
 
 import android.content.Context;
 import android.graphics.Bitmap;
+import android.graphics.drawable.Drawable;
 import android.os.Bundle;
 import android.os.Parcelable;
 import android.support.v4.view.PagerAdapter;
 import android.support.v4.view.ViewPager;
+import android.text.SpannableStringBuilder;
+import android.text.style.ImageSpan;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -155,5 +158,7 @@ public class ImagePagerFragment extends BaseFragment {
 		public Parcelable saveState() {
 			return null;
 		}
+
+
 	}
 }
