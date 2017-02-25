@@ -35,6 +35,7 @@ import com.nostra13.universalimageloader.core.display.FadeInBitmapDisplayer;
 import com.nostra13.universalimageloader.core.listener.SimpleImageLoadingListener;
 
 import net.dowhile.imageseeker.Constants;
+import net.dowhile.imageseeker.Model.ItemData;
 import net.dowhile.imageseeker.R;
 
 /**
@@ -43,23 +44,31 @@ import net.dowhile.imageseeker.R;
 public class ImagePagerFragment extends BaseFragment {
 
 	public static final int INDEX = 2;
-
+	public static ItemData[] dataArray = new ItemData[] {};
+	ImageAdapter adapter;
+	public void setData(ItemData[] data) {
+		dataArray = data;
+	}
 	@Override
 	public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
 		View rootView = inflater.inflate(R.layout.fr_image_pager, container, false);
 		ViewPager pager = (ViewPager) rootView.findViewById(R.id.pager);
-		pager.setAdapter(new ImageAdapter(getActivity()));
+		adapter = new ImageAdapter(getActivity());
+		adapter.setData(dataArray);
+		pager.setAdapter(adapter);
 		pager.setCurrentItem(getArguments().getInt(Constants.Extra.IMAGE_POSITION, 0));
 		return rootView;
 	}
 
 	private static class ImageAdapter extends PagerAdapter {
 
-		private static final String[] IMAGE_URLS = Constants.IMAGES;
-
 		private LayoutInflater inflater;
 		private DisplayImageOptions options;
-
+		public static ItemData[] dataArray = new ItemData[] {};
+		public void setData(ItemData[] data) {
+			dataArray = data;
+			notifyDataSetChanged();
+		}
 		ImageAdapter(Context context) {
 			inflater = LayoutInflater.from(context);
 
@@ -82,7 +91,7 @@ public class ImagePagerFragment extends BaseFragment {
 
 		@Override
 		public int getCount() {
-			return IMAGE_URLS.length;
+			return dataArray.length;
 		}
 
 		@Override
@@ -92,7 +101,7 @@ public class ImagePagerFragment extends BaseFragment {
 			ImageView imageView = (ImageView) imageLayout.findViewById(R.id.image);
 			final ProgressBar spinner = (ProgressBar) imageLayout.findViewById(R.id.loading);
 
-			ImageLoader.getInstance().displayImage(IMAGE_URLS[position], imageView, options, new SimpleImageLoadingListener() {
+			ImageLoader.getInstance().displayImage(dataArray[position].getImg(), imageView, options, new SimpleImageLoadingListener() {
 				@Override
 				public void onLoadingStarted(String imageUri, View view) {
 					spinner.setVisibility(View.VISIBLE);

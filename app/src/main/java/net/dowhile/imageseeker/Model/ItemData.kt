@@ -6,13 +6,10 @@
 package net.dowhile.imageseeker.Model
 import com.google.gson.Gson
 import com.google.gson.annotations.SerializedName
+import java.io.Serializable
 
 
-class ItemData
-/**
- * Instantiate the instance using the passed jsonObject to set the properties values
- */
-(json: String?) {
+class ItemData(json: String?):Serializable {
 
     @SerializedName("img")
     var img: String? = null

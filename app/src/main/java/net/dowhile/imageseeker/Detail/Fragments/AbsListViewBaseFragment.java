@@ -24,6 +24,7 @@ import com.nostra13.universalimageloader.core.listener.PauseOnScrollListener;
 
 import net.dowhile.imageseeker.Constants;
 import net.dowhile.imageseeker.Detail.activity.SimpleImageActivity;
+import net.dowhile.imageseeker.Model.ItemData;
 import net.dowhile.imageseeker.R;
 
 /**
@@ -74,9 +75,10 @@ public abstract class AbsListViewBaseFragment extends BaseFragment {
 		}
 	}
 
-	protected void startImagePagerActivity(int position) {
+	protected void startImagePagerActivity(ItemData[] dataArray,int position) {
 		Intent intent = new Intent(getActivity(), SimpleImageActivity.class);
 		intent.putExtra(Constants.Extra.FRAGMENT_INDEX, ImagePagerFragment.INDEX);
+		intent.putExtra("DATA", dataArray);
 		intent.putExtra(Constants.Extra.IMAGE_POSITION, position);
 		startActivity(intent);
 	}

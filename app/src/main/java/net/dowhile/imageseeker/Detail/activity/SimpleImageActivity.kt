@@ -24,6 +24,7 @@ import net.dowhile.imageseeker.Detail.Fragments.ImageGalleryFragment
 import net.dowhile.imageseeker.Detail.Fragments.ImageGridFragment
 import net.dowhile.imageseeker.Detail.Fragments.ImageListFragment
 import net.dowhile.imageseeker.Detail.Fragments.ImagePagerFragment
+import net.dowhile.imageseeker.Model.ItemData
 import net.dowhile.imageseeker.R
 
 /**
@@ -34,6 +35,7 @@ class SimpleImageActivity : FragmentActivity() {
         super.onCreate(savedInstanceState)
 
         val frIndex = intent.getIntExtra(Constants.Extra.FRAGMENT_INDEX, 0)
+        var dataArray:Array<ItemData> = intent.getSerializableExtra("DATA")as Array<ItemData>
         var fr: Fragment?
         val tag: String
         val titleRes: Int
@@ -75,6 +77,7 @@ class SimpleImageActivity : FragmentActivity() {
         }
 
         setTitle("Simple")
+        (fr as ImagePagerFragment).setData(dataArray)
         supportFragmentManager.beginTransaction().replace(android.R.id.content, fr, tag).commit()
     }
 }

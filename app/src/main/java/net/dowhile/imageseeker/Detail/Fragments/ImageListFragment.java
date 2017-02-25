@@ -37,6 +37,7 @@ import com.nostra13.universalimageloader.core.listener.ImageLoadingListener;
 import com.nostra13.universalimageloader.core.listener.SimpleImageLoadingListener;
 
 import net.dowhile.imageseeker.Constants;
+import net.dowhile.imageseeker.Model.ItemData;
 import net.dowhile.imageseeker.R;
 
 import java.util.Collections;
@@ -49,7 +50,7 @@ import java.util.List;
 public class ImageListFragment extends AbsListViewBaseFragment {
 
 	public static final int INDEX = 0;
-
+	public static ItemData[] dataArray = new ItemData[] {};
 	@Override
 	public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
 		View rootView = inflater.inflate(R.layout.fr_image_list, container, false);
@@ -58,7 +59,7 @@ public class ImageListFragment extends AbsListViewBaseFragment {
 		listView.setOnItemClickListener(new OnItemClickListener() {
 			@Override
 			public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
-				startImagePagerActivity(position);
+				startImagePagerActivity(dataArray,position);
 			}
 		});
 		return rootView;
