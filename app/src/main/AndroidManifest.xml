@@ -29,5 +29,7 @@
         <activity
             android:name="com.avos.avoscloud.feedback.ThreadActivity" >
         </activity>
+        <activity android:name=".Detail.activity.ComplexImageActivity" />
+        <activity android:name=".Detail.activity.SimpleImageActivity" />
     </application>
 </manifest>

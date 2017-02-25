@@ -10,8 +10,11 @@ import android.support.v7.widget.OrientationHelper
 import android.support.v7.widget.RecyclerView
 import android.util.Log
 import com.avos.avoscloud.*
+import com.nostra13.universalimageloader.core.ImageLoader
+import com.nostra13.universalimageloader.core.ImageLoaderConfiguration
 import kotlinx.android.synthetic.main.activity_main.*
 import net.dowhile.imageseeker.Detail.ImageActivity
+import net.dowhile.imageseeker.Detail.activity.ComplexImageActivity
 import net.youmi.android.AdManager
 import org.jetbrains.anko.support.v4.onRefresh
 import org.jetbrains.anko.toast
@@ -22,6 +25,10 @@ class MainActivity : AppCompatActivity() {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_main)
 
+
+        val config = ImageLoaderConfiguration.Builder(this)
+                .build();
+        ImageLoader.getInstance().init(config);
 
         //有米广告
         val appId = "542faf057d621231"
@@ -51,8 +58,10 @@ class MainActivity : AppCompatActivity() {
         //设置为垂直布局，这也是默认的
         layoutManager.orientation = OrientationHelper.VERTICAL
         val adapter = IndexRecycleAdapter({data ->
-            val intent = Intent(this, ImageActivity::class.java)
-            intent.putExtra("title",data.title)
+//            val intent = Intent(this, ImageActivity::class.java)
+//            intent.putExtra("title",data.title)
+
+            val intent = Intent(this, ComplexImageActivity::class.java)
             intent.putExtra("url",data.url)
             this.startActivity(intent)
         })
