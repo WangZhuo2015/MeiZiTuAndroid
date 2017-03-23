@@ -18,6 +18,7 @@ package net.dowhile.imageseeker.Detail.Fragments;
 import android.content.Context;
 import android.graphics.Bitmap;
 import android.graphics.drawable.Drawable;
+import android.media.Image;
 import android.os.Bundle;
 import android.os.Parcelable;
 import android.support.v4.view.PagerAdapter;
@@ -35,10 +36,12 @@ import com.nostra13.universalimageloader.core.ImageLoader;
 import com.nostra13.universalimageloader.core.assist.FailReason;
 import com.nostra13.universalimageloader.core.assist.ImageScaleType;
 import com.nostra13.universalimageloader.core.display.FadeInBitmapDisplayer;
+import com.nostra13.universalimageloader.core.download.ImageDownloader;
 import com.nostra13.universalimageloader.core.listener.SimpleImageLoadingListener;
 
 import net.dowhile.imageseeker.Constants;
 import net.dowhile.imageseeker.Model.ItemData;
+import net.dowhile.imageseeker.Network.MyImageDownloader;
 import net.dowhile.imageseeker.R;
 
 /**
@@ -56,10 +59,20 @@ public class ImagePagerFragment extends BaseFragment {
 	public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
 		View rootView = inflater.inflate(R.layout.fr_image_pager, container, false);
 		ViewPager pager = (ViewPager) rootView.findViewById(R.id.pager);
+		ImageView image = (ImageView) rootView.findViewById(R.id.image);
+//		image.setOnLongClickListener(new View.OnLongClickListener() {
+//			@Override
+//			public boolean onLongClick(View view) {
+//				MyImageDownloader downloader = new MyImageDownloader();
+//
+//				return false;
+//			}
+//		});
 		adapter = new ImageAdapter(getActivity());
 		adapter.setData(dataArray);
 		pager.setAdapter(adapter);
 		pager.setCurrentItem(getArguments().getInt(Constants.Extra.IMAGE_POSITION, 0));
+
 		return rootView;
 	}
 
